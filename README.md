@@ -4,9 +4,7 @@ Complete, compliant and well tested module for implementing an OAuth2 Server/Pro
 
 This is the express wrapper for [oauth2-server](https://github.com/oauthjs/node-oauth2-server).
 
-## Installation
-
-    $ npm install express-oauth-server
+我需要用 https://github.com/oauthjs/express-oauth-server.但是发现有bug。所以，我修改了其中的bug，提交到自己github上。但文档和代码的共享都归功于原作者。
 
 ## Quick Start
 
