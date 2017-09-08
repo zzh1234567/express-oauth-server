@@ -11,6 +11,8 @@ This is the express wrapper for [oauth2-server](https://github.com/oauthjs/node-
 ## Quick Start
 
 The module provides two middlewares - one for granting tokens and another to authorize them. `express-oauth-server` and, consequently `oauth2-server`, expect the request body to be parsed already.
+
+##-------------------------------- Usage 1
 The following example uses `body-parser` but you may opt for an alternative library.
 
 ```js
@@ -34,7 +36,33 @@ app.use(function(req, res) {
 
 app.listen(3000);
 ```
+##-------------------------------- Usage 2
+export default app => {
 
+	//// 如果没有oauth client，那么用clientid和client secret创建一个作为测试用
+	if( undefined == oauthModel.getClient('KzEZED7aC0vird8jWyHM38mXjNTY', 'W9JZoJe00qPvJsiyCGT3CCtC6ZUtdpKpzMbNlUGP'))
+		{
+		oauthModel.createClient(
+		'KzEZED7aC0vird8jWyHM38mXjNTY',  
+		'W9JZoJe00qPvJsiyCGT3CCtC6ZUtdpKpzMbNlUGP',
+		'/oauth/redirect',
+		[
+			"password",
+			"authorization_code",
+			"refresh_token"
+		]
+	);
+	}
+
+	// // add express oauth server
+	app.oauth = new oauthserver({
+		model: oauthModel,
+		grants: ['password', 'authorization_code', 'refresh_token'],
+		debug: true
+	});
+	// // https://github.com/expressjs/body-parser
+	app.use('/auth/token', bodyParser.urlencoded({ extended: false }), app.oauth.token()); // // // create application/x-www-form-urlencoded parser,发送Post请求获取Token
+##---------------------------------
 ## Options
 
 ```
