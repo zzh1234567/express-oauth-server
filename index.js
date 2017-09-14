@@ -122,11 +122,12 @@ ExpressOAuthServer.prototype.token = function(options) {
         return oauthModel.getAccessToken(response.body.access_token);
       })
       .then(function(user) {
-        response.body = 
+        /****response.body = 
         {
           ...response.body,
           user: user,
         }
+        ****/
         return handleResponse.call(this, req, res, response);
       })
       .catch(function(e) {

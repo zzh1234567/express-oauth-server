@@ -62,6 +62,18 @@ module.exports.getClient = function(clientId, clientSecret) {
   return OAuthClientsModel.findOne({ clientId: clientId, clientSecret: clientSecret }).lean();
 };
 
+module.exports.getClientCallback = function(clientId, clientSecret, callback) {
+  return OAuthClientsModel.findOne({ clientId: clientId, clientSecret: clientSecret }, function(err,doc){
+		if(err){
+			callback(err,doc);	
+		}
+    else
+    {
+      callback(null,doc);
+    }
+	});
+};
+
 /**** 
  * Create client.
  */
@@ -125,7 +137,7 @@ module.exports.saveToken = function(token, client, user) {
     refreshToken: token.refreshToken,
     refreshTokenExpiresAt: token.refreshTokenExpiresAt,
     user : user,
-    userId: user._id,
+    userId: user.uid,
   });
   // Can't just chain `lean()` to `save()` as we did with `findOne()` elsewhere. Instead we use `Promise` to resolve the data.
   return new Promise( function(resolve,reject){
@@ -142,8 +154,8 @@ module.exports.saveToken = function(token, client, user) {
     for( var prop in saveResult ) data[prop] = saveResult[prop];
     
     // /oauth-server/lib/models/token-model.js complains if missing `client` and `user`. Creating missing properties.
-    data.client = data.clientId;
-    data.user = data.userId;
+    // //data.client = data.clientId;
+    // // data.user = data.userId;
 
     return data;
   });
