@@ -4,7 +4,7 @@ Complete, compliant and well tested module for implementing an OAuth2 Server/Pro
 
 This is the express wrapper for [oauth2-server](https://github.com/oauthjs/node-oauth2-server).
 
-我需要用 https://github.com/oauthjs/express-oauth-server.但是发现有bug。所以，我修改了其中的bug，提交到自己github上。但文档和代码的共享都归功于原作者。
+我需要用 https://github.com/oauthjs/express-oauth-server.但是发现有bug。所以，我修改了其中有关mongodb的bug，提交到自己github上。但文档和代码的共享都归功于原作者。
 
 ## Quick Start
 
@@ -39,20 +39,19 @@ app.listen(3000);
 
 export default app => {
 
-	//// 如果没有oauth client，那么用clientid和client secret创建一个作为测试用
-	if( undefined == oauthModel.getClient('KzEZED7aC0vird8jWyHM38mXjNTY', 'W9JZoJe00qPvJsiyCGT3CCtC6ZUtdpKpzMbNlUGP'))
-		{
-		oauthModel.createClient(
-		'KzEZED7aC0vird8jWyHM38mXjNTY',  
-		'W9JZoJe00qPvJsiyCGT3CCtC6ZUtdpKpzMbNlUGP',
-		'/oauth/redirect',
-		[
-			"password",
-			"authorization_code",
-			"refresh_token"
-		]
-	);
-	}
+// // 如果没有oauth client，那么创建一个。 http://blog.csdn.net/u011581005/article/details/23650917
+oauthModel.getClientCallback('KzEZED7aC0vird8jWyHM38mXjNTYA', 'W9JZoJe00qPvJsiyCGT3CCtC6ZUtdpKpzMbNlUGP',
+function (err, client) {
+if (!err && (client == null)) {
+oauthModel.createClient('KzEZED7aC0vird8jWyHM38mXjNTYA', 'W9JZoJe00qPvJsiyCGT3CCtC6ZUtdpKpzMbNlUGP', '/oauth/redirect',
+[
+'password',
+'authorization_code',
+'refresh_token',
+]
+);
+}
+});
 
 	// // add express oauth server
 	app.oauth = new oauthserver({
